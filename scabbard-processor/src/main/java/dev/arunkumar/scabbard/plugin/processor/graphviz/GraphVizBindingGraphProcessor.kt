@@ -105,18 +105,11 @@ constructor(
     edges: Sequence<Edge>
   ) {
     entryPointsCluster(nodes)
-
     dependencyGraphCluster(nodes)
-
     subcomponentsCluster(subcomponents)
 
-    // Render edges between all nodes
-    edges.forEach { edge ->
-      val (source, target) = bindingGraph.network().incidentNodes(edge)
-      if (globalNodeIds.containsKey(source) && globalNodeIds.containsKey(target)) {
-        addEdge(edge, source, target)
-      }
-    }
+    val inheritedBindings = renderEdges(edges)
+    inheritedBindingsCluster(inheritedBindings)
   }
 
   private fun DotGraphBuilder.entryPointsCluster(nodes: Sequence<Node>) {
@@ -232,6 +225,40 @@ constructor(
       }
   }
 
+  /**
+   * Data structure to hold details about inherited bindings.
+   */
+  data class InheritedBindings(
+    val inheritedNodes: Sequence<Node>,
+    val inheritedNodesEdges: Sequence<Edge>
+  )
+
+  private fun DotGraphBuilder.renderEdges(edges: Sequence<Edge>): InheritedBindings {
+    val inheritedNodes = mutableMapOf<Node, Node>()
+    val inheritedNodesEdges = mutableListOf<Edge>()
+
+    edges.forEach { edge ->
+      // Render edges between only nodes present in this component
+      val (source, target) = bindingGraph.network().incidentNodes(edge)
+      if (globalNodeIds.containsKey(source) && globalNodeIds.containsKey(target)) {
+        addEdge(edge, source, target)
+      } else {
+        // Global edges will have all nodes, even ones not related. We can filter out valid nodes
+        // by checking if the `target` already has a `source` in current context.
+        val hasSource = globalNodeIds.containsKey(source) || inheritedNodes.containsKey(source)
+        if (hasSource && !globalNodeIds.containsKey(target)) {
+          inheritedNodes[target] = target
+          inheritedNodesEdges.add(edge)
+        }
+      }
+    }
+
+    return InheritedBindings(
+      inheritedNodes = inheritedNodes.keys.asSequence(),
+      inheritedNodesEdges = inheritedNodesEdges.asSequence()
+    )
+  }
+
   private fun DotGraphBuilder.addEdge(edge: Edge, source: Node, target: Node) {
     when (edge) {
       is DependencyEdge -> {
@@ -265,6 +292,27 @@ constructor(
           "xlabel" eq "subcomponent"
         }
       }
+    }
+  }
+
+  private fun DotGraphBuilder.inheritedBindingsCluster(inheritedBindings: InheritedBindings) {
+    val (inheritedNodes, inheritedNodesEdges) = inheritedBindings
+    inheritedNodes
+      .groupBy { it.componentPath() }
+      .forEach { (componentPath, componentNodes) ->
+        val clusterName = "(Inherited only) $componentPath"
+        cluster(clusterName) {
+          graphAttributes {
+            "labeljust" eq "l"
+            "label" eq clusterName
+          }
+          dependencyGraphCluster(componentNodes.asSequence())
+        }
+      }
+    inheritedNodesEdges.forEach { edge ->
+      // TODO(arun) Memoize incident nodes
+      val (source, target) = bindingGraph.network().incidentNodes(edge)
+      addEdge(edge, source, target)
     }
   }
 }
