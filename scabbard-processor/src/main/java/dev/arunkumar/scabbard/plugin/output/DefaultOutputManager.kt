@@ -20,16 +20,17 @@ constructor(
     val componentName = ClassName.get(currentComponent)
     val packageName = componentName.packageName()
     val componentSimpleNames = componentName.simpleNames().joinToString(".")
-    val fileName = "$packageName.$componentSimpleNames".replace("$", ".")
+    val relativeName = "$packageName.$componentSimpleNames".replace("$", ".")
+    val pkg = "scabbardGraph.$componentName"
     val graphOutput = filer.createResource(
       CLASS_OUTPUT,
-      componentName.toString(),
-      "$fileName.png"
+      pkg,
+      "$relativeName.png"
     )
     val dotOutput = filer.createResource(
       CLASS_OUTPUT,
-      componentName.toString(),
-      "$fileName.dot"
+      pkg,
+      "$relativeName.dot"
     )
     return OutputFiles(
       graphOutput,

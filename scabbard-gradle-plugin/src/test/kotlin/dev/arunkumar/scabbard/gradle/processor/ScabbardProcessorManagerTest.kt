@@ -2,7 +2,7 @@ package dev.arunkumar.scabbard.gradle.processor
 
 import dev.arunkumar.scabbard.gradle.ScabbardGradlePlugin.Companion.PLUGIN_ID
 import dev.arunkumar.scabbard.gradle.common.ProjectTest
-import dev.arunkumar.scabbard.gradle.projectmeta.ANNOTATION_PROCESSOR
+import dev.arunkumar.scabbard.gradle.meta.ANNOTATION_PROCESSOR
 import org.gradle.api.Project
 import org.junit.Assert.assertTrue
 import org.junit.Test

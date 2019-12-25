@@ -1,4 +1,4 @@
-package dev.arunkumar.scabbard.gradle.projectmeta
+package dev.arunkumar.scabbard.gradle.meta
 
 import dev.arunkumar.scabbard.gradle.ScabbardGradlePlugin
 import org.gradle.api.Project

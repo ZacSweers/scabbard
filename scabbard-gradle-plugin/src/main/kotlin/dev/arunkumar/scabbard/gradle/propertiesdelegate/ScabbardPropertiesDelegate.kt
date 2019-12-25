@@ -2,8 +2,8 @@ package dev.arunkumar.scabbard.gradle.propertiesdelegate
 
 import dev.arunkumar.scabbard.gradle.DefaultScabbardSpec
 import dev.arunkumar.scabbard.gradle.ScabbardGradlePlugin.Companion.SCABBARD
-import dev.arunkumar.scabbard.gradle.projectmeta.hasJavaAnnotationProcessorConfig
-import dev.arunkumar.scabbard.gradle.projectmeta.isKotlinProject
+import dev.arunkumar.scabbard.gradle.meta.hasJavaAnnotationProcessorConfig
+import dev.arunkumar.scabbard.gradle.meta.isKotlinProject
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.withType
