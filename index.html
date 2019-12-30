@@ -34,7 +34,7 @@
 <span class=c1>// After Java, Kotlin or Android plugins</span>
 <span class=n>apply</span><span class=p>(</span><span class=n>plugin</span> <span class=p>=</span> <span class=s>&quot;scabbard.gradle&quot;</span><span class=p>)</span>
 </pre></div></div> </div> <p>After applying the plugin, configure the plugin by adding a <code>scabbard</code> block:</p> <div class=superfences-tabs> <input name=__tabs_3 type=radio id=__tab_3_0 checked=checked> <label for=__tab_3_0>Groovy</label> <div class=superfences-content><div class=codehilite><pre><span></span><span class=n>scabbard</span> <span class=o>{</span>
-    <span class=n>enabled</span> <span class=o>=</span> <span class=kc>true</span>
+    <span class=n>enabled</span> <span class=kc>true</span>
 <span class=o>}</span>
 </pre></div></div> <input name=__tabs_3 type=radio id=__tab_3_1> <label for=__tab_3_1>Kotlin</label> <div class=superfences-content><div class=codehilite><pre><span></span><span class=n>scabbard</span><span class=p>.</span><span class=n>configure</span><span class=p>(</span><span class=n>closureOf</span><span class=p>&lt;</span><span class=n>ScabbardSpec</span><span class=p>&gt;</span> <span class=p>{</span>
     <span class=n>enabled</span><span class=p>(</span><span class=k>true</span><span class=p>)</span>
